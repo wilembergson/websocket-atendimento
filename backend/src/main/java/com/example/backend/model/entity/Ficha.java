@@ -1,6 +1,7 @@
 package com.example.backend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,11 @@ public class Ficha {
     @OneToOne(mappedBy = "ficha")
     @JsonBackReference
     private Atendimento atendimento;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LOCAL_ID", referencedColumnName = "ID", nullable = false)
+    @JsonIgnore
+    private Local local;
 
     public String getIdentificacao(){
         return "FI"+numero;

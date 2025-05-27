@@ -1,6 +1,7 @@
 package com.example.backend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -35,6 +36,11 @@ public class Atendimento {
     @JoinColumn(name = "id_guiche", referencedColumnName = "id")
     @JsonManagedReference
     private Guiche guiche;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LOCAL_ID", referencedColumnName = "ID", nullable = false)
+    @JsonIgnore
+    private Local local;
 
     public String getData(){
         return data.getDayOfMonth()+"/"+data.getMonthValue()+"/"+data.getYear()+" "+data.getHour()+":"+data.getMinute();
