@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.model.dto.Atendimento.AlterarStatusDTO;
 import com.example.backend.model.dto.Atendimento.AtendimentoItemListaDTO;
 import com.example.backend.model.dto.Atendimento.ExibirPainelDTO;
+import com.example.backend.model.dto.Atendimento.ListarAtendimentosDTO;
 import com.example.backend.model.entity.Atendimento;
 import com.example.backend.service.AtendimentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,9 @@ public class AtendimentoController {
     private static String webSocketChamarNoPainel = "/topic/exibir-painel-";
 
 
-    @GetMapping("/listar/{status}")
-    public ResponseEntity listar(@PathVariable String status){
-        List<AtendimentoItemListaDTO> atendimentos = atendimentoService.listar(status);
+    @GetMapping("/listar")
+    public ResponseEntity listar(@RequestParam String status, @RequestParam Long idLocal){
+        List<AtendimentoItemListaDTO> atendimentos = atendimentoService.listar(status, idLocal);
         return ResponseEntity.ok(atendimentos);
     }
 

@@ -7,18 +7,26 @@ import api, { API_URL } from '@/api/api';
 import ItemAtendimento from './ItemAtendimento';
 import { Atendimento } from './ListarAguardando';
 
-export default function ListarEmAtendimento() {
+type Props = {
+  idLocal: number
+}
+
+export default function ListarEmAtendimento({ idLocal }: Props) {
   const statusEmAtendimento = "EM_ATENDIMENTO"
   const [atendimentos, setAtendimentos] = useState<Atendimento[]>([]);
 
-    async function listarAtendimentos(){
-        try{
-            const promise = await api.listar(statusEmAtendimento)
-            setAtendimentos(promise.data)
-        } catch(e: any){
-            console.log(e)
-        }
+  async function listarAtendimentos() {
+    try {
+      const promise = await api.listar(statusEmAtendimento, idLocal)
+      setAtendimentos(promise.data)
+    } catch (e: any) {
+      console.log(e)
     }
+  }
+
+  useEffect(() => {
+    listarAtendimentos()
+  }, [idLocal])
 
   useEffect(() => {
     listarAtendimentos()
@@ -32,7 +40,7 @@ export default function ListarEmAtendimento() {
     });
 
     return () => {
-      stompClient.disconnect(() => {});
+      stompClient.disconnect(() => { });
     };
   }, []);
 
@@ -41,7 +49,7 @@ export default function ListarEmAtendimento() {
       <div className='flex flex-col w-full my-4 items-center bg-gray-500 p-2 rounded-md'>
         <h1>Em atendimento: {atendimentos.length}</h1>
         {atendimentos.map((atendimento) => (
-          <ItemAtendimento key={atendimento.id} atendimento={atendimento}/>
+          <ItemAtendimento key={atendimento.id} atendimento={atendimento} />
         ))}
       </div>
     </div>

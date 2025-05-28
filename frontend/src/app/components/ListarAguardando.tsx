@@ -28,13 +28,17 @@ export interface Atendimento {
   nomeLocal: string
 }
 
-export default function ListarAguardando() {
+type Props = {
+  idLocal: number
+}
+
+export default function ListarAguardando({idLocal}: Props) {
   const statusAguardando = "AGUARDANDO"
   const [aguardando, setAguardando] = useState<Atendimento[]>([]);
 
     async function listarAguardando(){
         try{
-            const promise = await api.listar(statusAguardando)
+            const promise = await api.listar(statusAguardando, idLocal)
             setAguardando(promise.data)
         } catch(e: any){
             console.log(e)

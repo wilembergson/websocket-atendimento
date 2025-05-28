@@ -2,6 +2,8 @@ package com.example.backend.repository;
 
 import com.example.backend.model.entity.Atendimento;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,9 +12,11 @@ import java.util.Optional;
 @Repository
 public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> {
 
-    List<Atendimento> findByStatusOrderByDataDesc(String status);
+    @Query(value = "SELECT * FROM atendimento WHERE status = :status AND local_id = :idLocal ORDER BY data DESC", nativeQuery = true)
+    List<Atendimento> listarPorStatusELocalDesc(@Param("status") String status, @Param("idLocal") Long idLocal);
 
-    List<Atendimento> findByStatusOrderByData(String status);
+    @Query(value = "SELECT * FROM atendimento WHERE status = :status AND local_id = :idLocal", nativeQuery = true)
+    List<Atendimento> listarPorStatusELocal(@Param("status") String status, @Param("idLocal") Long idLocal);
 
     List<Atendimento> findBySinalSonoroOrderByDataDesc(Integer sinalSonoro);
 

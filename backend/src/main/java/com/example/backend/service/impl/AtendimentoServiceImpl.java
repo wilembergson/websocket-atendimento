@@ -2,6 +2,7 @@ package com.example.backend.service.impl;
 
 import com.example.backend.model.dto.Atendimento.AtendimentoItemListaDTO;
 import com.example.backend.model.dto.Atendimento.ExibirPainelDTO;
+import com.example.backend.model.dto.Atendimento.ListarAtendimentosDTO;
 import com.example.backend.model.entity.Atendimento;
 import com.example.backend.repository.AtendimentoRepository;
 import com.example.backend.service.AtendimentoService;
@@ -20,12 +21,12 @@ public class AtendimentoServiceImpl implements AtendimentoService {
     private AtendimentoRepository atendimentoRepository;
 
     @Override
-    public List<AtendimentoItemListaDTO> listar(String status) {
+    public List<AtendimentoItemListaDTO> listar(String status, Long idLocal) {
         List<Atendimento> atendimentos;
         if(status.equals("AGUARDANDO")){
-            atendimentos = atendimentoRepository.findByStatusOrderByData(status);
+            atendimentos = atendimentoRepository.listarPorStatusELocal(status, idLocal);
         } else {
-            atendimentos = atendimentoRepository.findByStatusOrderByDataDesc(status);
+            atendimentos = atendimentoRepository.listarPorStatusELocalDesc(status, idLocal);
         }
         return listarAtendimentosDTO(atendimentos);
     }

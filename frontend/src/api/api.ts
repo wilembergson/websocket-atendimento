@@ -6,8 +6,13 @@ type AlterarStatus = {
     status: string
 }
 
-async function listar(status: string){
-    return await axios.get(`${API_URL}/atendimento/listar/${status}`)
+type ListarAtendimentos = {
+    status: string
+    idLocal: number
+}
+
+async function listar(status: string, idLocal: number){
+    return await axios.get(`${API_URL}/atendimento/listar?status=${status}&idLocal=${idLocal}`)
 }
 
 async function alterarStatus(idFicha: number, data: AlterarStatus){
