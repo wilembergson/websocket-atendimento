@@ -1,4 +1,4 @@
 package com.example.backend.model.dto.Atendimento;
 
-public record AlterarStatusDTO(String status) {
+public record AlterarStatusDTO(String status, Long idLocal) {
 }

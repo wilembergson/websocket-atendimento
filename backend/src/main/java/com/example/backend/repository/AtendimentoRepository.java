@@ -18,7 +18,8 @@ public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> 
     @Query(value = "SELECT * FROM atendimento WHERE status = :status AND local_id = :idLocal", nativeQuery = true)
     List<Atendimento> listarPorStatusELocal(@Param("status") String status, @Param("idLocal") Long idLocal);
 
-    List<Atendimento> findBySinalSonoroOrderByDataDesc(Integer sinalSonoro);
+    @Query(value = "SELECT * FROM atendimento WHERE local_id = :idLocal AND sinal_sonoro = :sinalSonoro", nativeQuery = true)
+    List<Atendimento> findBySinalSonoroOrderByDataDesc(@Param("idLocal") Long idLocal, @Param("sinalSonoro") Integer sinalSonoro);
 
     Optional<Atendimento> findByFichaId(Long idFicha);
 }

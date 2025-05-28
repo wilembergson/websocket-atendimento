@@ -25,6 +25,7 @@ export interface Atendimento {
   idFicha: number
   tipoFicha: string
   identificacaoFicha: string
+  idLocal: number
   nomeLocal: string
 }
 

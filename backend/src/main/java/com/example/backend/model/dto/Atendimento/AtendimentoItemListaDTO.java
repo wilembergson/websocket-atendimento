@@ -7,6 +7,7 @@ public record AtendimentoItemListaDTO(
         Long idFicha,
         String tipoFicha,
         String identificacaoFicha,
+        Long idLocal,
         String nomeLocal
 ) {
 }

@@ -12,7 +12,7 @@ export default function ItemAtendimento({atendimento}:Props){
 
     async function alterarStatus(status: string){
         try{
-            await api.alterarStatus(atendimento.idFicha, {status})
+            await api.alterarStatus(atendimento.idFicha, {status, idLocal: atendimento.idLocal})
         } catch(e: any){
             console.log(e)
         }

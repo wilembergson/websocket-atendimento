@@ -5,6 +5,7 @@ import { CompatClient, Stomp } from '@stomp/stompjs';
 import api, { API_URL } from '@/api/api';
 import ItemAtendimento from './ItemAtendimento';
 import SockJS from 'sockjs-client';
+import { useSearchParams } from 'next/navigation';
 
 export interface Ficha {
   id: number;
@@ -20,9 +21,9 @@ export interface Guiche {
 
 export interface Atendimento {
   id:number
-  status: string
+  identificacao: string
+  tipo: string
   data: string
-  ficha: Ficha
 }
 
 type ExibirPainel = {
@@ -32,6 +33,8 @@ type ExibirPainel = {
 }
 
 export default function ListarEmAtendimento() {
+  const params = useSearchParams()
+  const idLocal = params.get('idLocal')
   const [painel, setPainel] = useState<ExibirPainel>();
 
   function som(ficha: string){
@@ -59,7 +62,7 @@ export default function ListarEmAtendimento() {
     const stompClient: CompatClient = Stomp.over(socket);
 
     stompClient.connect({}, () => {
-      stompClient.subscribe('/topic/exibir-painel', (message) => {
+      stompClient.subscribe(`/topic/exibir-painel-${idLocal}`, (message) => {
         listarAtendimentos()
       });
     });
@@ -74,10 +77,10 @@ export default function ListarEmAtendimento() {
       <div className='flex m-4 w-1/2'>
         <section className='flex flex-col bg-slate-700 text-white w-full justify-center items-center rounded-lg font-bold'>
           <h1 className='flex text-[3rem] sm:text-[5rem] md:text-[7rem] lg:text-[12rem] xl:text-[16rem]'>
-            {painel?.chamada?.ficha!.identificacao}
+            {painel?.chamada?.identificacao}
           </h1>
           <h1 className='flex text-4xl'>
-            {painel?.chamada?.ficha!.tipo}
+            {painel?.chamada?.tipo}
           </h1>
         </section>
       </div>

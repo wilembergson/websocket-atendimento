@@ -11,7 +11,7 @@ public interface AtendimentoService {
 
     List<AtendimentoItemListaDTO> listar(String status, Long idLocal);
 
-    ExibirPainelDTO listarFichasChamadas();
+    ExibirPainelDTO listarFichasChamadas(Long idLocal);
 
     void alterarStatus(Long idFicha, String status);
 }

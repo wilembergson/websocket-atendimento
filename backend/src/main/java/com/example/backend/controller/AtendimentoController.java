@@ -3,8 +3,6 @@ package com.example.backend.controller;
 import com.example.backend.model.dto.Atendimento.AlterarStatusDTO;
 import com.example.backend.model.dto.Atendimento.AtendimentoItemListaDTO;
 import com.example.backend.model.dto.Atendimento.ExibirPainelDTO;
-import com.example.backend.model.dto.Atendimento.ListarAtendimentosDTO;
-import com.example.backend.model.entity.Atendimento;
 import com.example.backend.service.AtendimentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +33,8 @@ public class AtendimentoController {
     }
 
     @GetMapping("/listar-painel")
-    public ResponseEntity listarPainel(){
-        ExibirPainelDTO atendimentos = atendimentoService.listarFichasChamadas();
+    public ResponseEntity listarPainel(@RequestParam Long idLocal){
+        ExibirPainelDTO atendimentos = atendimentoService.listarFichasChamadas(idLocal);
         return ResponseEntity.ok(atendimentos);
     }
 
@@ -45,7 +43,7 @@ public class AtendimentoController {
         atendimentoService.alterarStatus(idFicha, dto.status());
         messagingTemplate.convertAndSend(webSocketDestino, Map.of("mensagem", ""));
         if(dto.status().equals("EM_ATENDIMENTO")){
-            messagingTemplate.convertAndSend(webSocketChamarNoPainel, Map.of("mensagem", ""));
+            messagingTemplate.convertAndSend(webSocketChamarNoPainel+dto.idLocal(), Map.of("mensagem", ""));
         }
         return ResponseEntity.ok(Map.of("mensagem", "Status do atendimento alterado"));
     }

@@ -4,6 +4,7 @@ export const API_URL = "http://localhost:8080"
 
 type AlterarStatus = {
     status: string
+    idLocal: number
 }
 
 type ListarAtendimentos = {

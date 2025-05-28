@@ -2,6 +2,7 @@ package com.example.backend.service.impl;
 
 import com.example.backend.model.dto.Atendimento.AtendimentoItemListaDTO;
 import com.example.backend.model.dto.Atendimento.ExibirPainelDTO;
+import com.example.backend.model.dto.Atendimento.ExibirPainelItemDTO;
 import com.example.backend.model.dto.Atendimento.ListarAtendimentosDTO;
 import com.example.backend.model.entity.Atendimento;
 import com.example.backend.repository.AtendimentoRepository;
@@ -32,11 +33,13 @@ public class AtendimentoServiceImpl implements AtendimentoService {
     }
 
     @Override
-    public ExibirPainelDTO listarFichasChamadas() {
-        List<Atendimento> lista = atendimentoRepository.findBySinalSonoroOrderByDataDesc(1);
-        Atendimento fichaChamada = lista.get(0);
+    public ExibirPainelDTO listarFichasChamadas(Long idLocal) {
+        List<Atendimento> lista = atendimentoRepository.findBySinalSonoroOrderByDataDesc(idLocal, 1);
+        Atendimento primeiraFicha = lista.get(0);
         List<Atendimento> ultimasChamadas = lista.subList(1, Math.min(6, lista.size()));
-        return new ExibirPainelDTO(fichaChamada, ultimasChamadas);
+        ExibirPainelItemDTO primeiraFichaDTO = converterAtendimentoParaPainel(primeiraFicha);
+        List<ExibirPainelItemDTO> ultimasChamadasDTO = listarAtendimentosParaPainel(ultimasChamadas);
+        return new ExibirPainelDTO(primeiraFichaDTO, ultimasChamadasDTO);
     }
 
     @Override
@@ -69,7 +72,23 @@ public class AtendimentoServiceImpl implements AtendimentoService {
                 atendimento.getFicha().getId(),
                 atendimento.getFicha().getTipo(),
                 atendimento.getFicha().getIdentificacao(),
+                atendimento.getLocal().getId(),
                 atendimento.getLocal().getNome()
+        );
+    }
+
+    private List<ExibirPainelItemDTO> listarAtendimentosParaPainel(List<Atendimento> lista){
+        return lista.stream()
+                .map(item -> converterAtendimentoParaPainel(item))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private ExibirPainelItemDTO converterAtendimentoParaPainel(Atendimento atendimento){
+        return new ExibirPainelItemDTO(
+                atendimento.getId(),
+                atendimento.getFicha().getIdentificacao(),
+                atendimento.getFicha().getTipo(),
+                atendimento.getData()
         );
     }
 }

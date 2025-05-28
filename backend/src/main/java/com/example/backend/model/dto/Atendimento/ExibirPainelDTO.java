@@ -4,5 +4,5 @@ import com.example.backend.model.entity.Atendimento;
 
 import java.util.List;
 
-public record ExibirPainelDTO(Atendimento chamada, List<Atendimento> ultimasChamadas) {
+public record ExibirPainelDTO(ExibirPainelItemDTO chamada, List<ExibirPainelItemDTO> ultimasChamadas) {
 }
