@@ -1,5 +1,6 @@
 package com.example.backend.service.impl;
 
+import com.example.backend.model.dto.Atendimento.AtendimentoItemListaDTO;
 import com.example.backend.model.dto.Atendimento.ExibirPainelDTO;
 import com.example.backend.model.entity.Atendimento;
 import com.example.backend.repository.AtendimentoRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AtendimentoServiceImpl implements AtendimentoService {
@@ -18,12 +20,14 @@ public class AtendimentoServiceImpl implements AtendimentoService {
     private AtendimentoRepository atendimentoRepository;
 
     @Override
-    public List<Atendimento> listar(String status) {
+    public List<AtendimentoItemListaDTO> listar(String status) {
+        List<Atendimento> atendimentos;
         if(status.equals("AGUARDANDO")){
-            return atendimentoRepository.findByStatusOrderByData(status);
+            atendimentos = atendimentoRepository.findByStatusOrderByData(status);
         } else {
-            return atendimentoRepository.findByStatusOrderByDataDesc(status);
+            atendimentos = atendimentoRepository.findByStatusOrderByDataDesc(status);
         }
+        return listarAtendimentosDTO(atendimentos);
     }
 
     @Override
@@ -48,5 +52,23 @@ public class AtendimentoServiceImpl implements AtendimentoService {
             atendimentoAtualizado.setSinalSonoro(1);
         }
         atendimentoRepository.save(atendimentoAtualizado);
+    }
+
+    private List<AtendimentoItemListaDTO> listarAtendimentosDTO(List<Atendimento> lista){
+        return lista.stream()
+                .map(item -> converterAtendimento(item))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private AtendimentoItemListaDTO converterAtendimento(Atendimento atendimento){
+        return new AtendimentoItemListaDTO(
+                atendimento.getId(),
+                atendimento.getStatus(),
+                atendimento.getData(),
+                atendimento.getFicha().getId(),
+                atendimento.getFicha().getTipo(),
+                atendimento.getFicha().getIdentificacao(),
+                atendimento.getLocal().getNome()
+        );
     }
 }

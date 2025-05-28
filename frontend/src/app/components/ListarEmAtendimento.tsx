@@ -5,26 +5,7 @@ import SockJS from 'sockjs-client';
 import { CompatClient, Stomp } from '@stomp/stompjs';
 import api, { API_URL } from '@/api/api';
 import ItemAtendimento from './ItemAtendimento';
-
-export interface Ficha {
-  id: number;
-  numero: number
-  tipo: string
-  identificacao: string;
-}
-
-export interface Guiche {
-  id: number
-  numero: number
-}
-
-export interface Atendimento {
-  id:number
-  status: string
-  data: string
-  ficha: Ficha
-
-}
+import { Atendimento } from './ListarAguardando';
 
 export default function ListarEmAtendimento() {
   const statusEmAtendimento = "EM_ATENDIMENTO"

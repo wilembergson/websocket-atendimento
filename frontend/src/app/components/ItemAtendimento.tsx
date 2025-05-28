@@ -3,7 +3,7 @@ import InfoAtendimento from "./InfoAtendimento"
 import { Atendimento } from "./ListarAguardando"
 
 type Props = {
-    atendimento: Atendimento
+    readonly atendimento: Atendimento
 }
 
 export default function ItemAtendimento({atendimento}:Props){
@@ -12,7 +12,7 @@ export default function ItemAtendimento({atendimento}:Props){
 
     async function alterarStatus(status: string){
         try{
-            await api.alterarStatus(atendimento.ficha.id, {status})
+            await api.alterarStatus(atendimento.idFicha, {status})
         } catch(e: any){
             console.log(e)
         }
@@ -20,9 +20,10 @@ export default function ItemAtendimento({atendimento}:Props){
 
     return(
         <section className="flex w-full justify-between items-center bg-slate-700 my-1 p-1 rounded-sm">
-            <InfoAtendimento info={atendimento.ficha.identificacao}/>
-            <InfoAtendimento info={atendimento.ficha.tipo}/>
+            <InfoAtendimento info={atendimento.identificacaoFicha}/>
+            <InfoAtendimento info={atendimento.tipoFicha}/>
             <InfoAtendimento info={atendimento.data}/>
+            <InfoAtendimento info={atendimento.nomeLocal}/>
             {atendimento.status === "AGUARDANDO" ?
             <button className="flex bg-blue-600 text-lg text-white font-bold p-1 rounded-sm cursor-pointer" onClick={() => alterarStatus(statusEmAtendimento)}>
                 Atender

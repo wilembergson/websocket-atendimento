@@ -22,8 +22,10 @@ export interface Atendimento {
   id:number
   status: string
   data: string
-  ficha: Ficha
-
+  idFicha: number
+  tipoFicha: string
+  identificacaoFicha: string
+  nomeLocal: string
 }
 
 export default function ListarAguardando() {

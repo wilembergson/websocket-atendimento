@@ -1,8 +1,6 @@
 package com.example.backend.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +8,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Ficha {
 
     @Id
@@ -23,12 +22,10 @@ public class Ficha {
     private String tipo;
 
     @OneToOne(mappedBy = "ficha")
-    @JsonBackReference
     private Atendimento atendimento;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "LOCAL_ID", referencedColumnName = "ID", nullable = false)
-    @JsonIgnore
     private Local local;
 
     public String getIdentificacao(){

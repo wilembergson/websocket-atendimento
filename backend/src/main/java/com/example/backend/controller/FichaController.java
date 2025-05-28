@@ -24,7 +24,7 @@ public class FichaController {
 
     @PostMapping("/emitir")
     public ResponseEntity emitir(@RequestBody NovaFichaDTO dto){
-        Ficha novaFicha = fichaService.emitir(dto.tipo());
+        Ficha novaFicha = fichaService.emitir(dto);
         messagingTemplate.convertAndSend(webSocketDestino, novaFicha);
         return ResponseEntity.ok("Ficha gerada");
     }

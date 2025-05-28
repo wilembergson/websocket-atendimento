@@ -1,8 +1,6 @@
 package com.example.backend.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Atendimento {
 
     @Id
@@ -29,17 +28,14 @@ public class Atendimento {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_ficha", referencedColumnName = "id")
-    @JsonManagedReference
     private Ficha ficha;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_guiche", referencedColumnName = "id")
-    @JsonManagedReference
     private Guiche guiche;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "LOCAL_ID", referencedColumnName = "ID", nullable = false)
-    @JsonIgnore
     private Local local;
 
     public String getData(){

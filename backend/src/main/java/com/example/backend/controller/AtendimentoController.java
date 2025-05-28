@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.dto.Atendimento.AlterarStatusDTO;
+import com.example.backend.model.dto.Atendimento.AtendimentoItemListaDTO;
 import com.example.backend.model.dto.Atendimento.ExibirPainelDTO;
 import com.example.backend.model.entity.Atendimento;
 import com.example.backend.service.AtendimentoService;
@@ -27,8 +28,8 @@ public class AtendimentoController {
 
 
     @GetMapping("/listar/{status}")
-    public ResponseEntity<List<Atendimento>> listar(@PathVariable String status){
-        List<Atendimento> atendimentos = atendimentoService.listar(status);
+    public ResponseEntity listar(@PathVariable String status){
+        List<AtendimentoItemListaDTO> atendimentos = atendimentoService.listar(status);
         return ResponseEntity.ok(atendimentos);
     }
 
