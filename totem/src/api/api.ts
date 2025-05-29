@@ -6,8 +6,8 @@ type AlterarStatus = {
     status: string
 }
 
-async function listar(){
-    return await axios.get(`${API_URL}/atendimento/listar-painel`)
+async function listar(idPainel: number){
+    return await axios.get(`${API_URL}/atendimento/listar-painel?idLocal=${idPainel}`)
 }
 
 async function alterarStatus(idFicha: number, data: AlterarStatus){

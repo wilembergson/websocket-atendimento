@@ -47,12 +47,14 @@ export default function ListarEmAtendimento() {
   };
 
     async function listarAtendimentos(){
-        try{
-            const promise = await api.listar()
+      try{
+        const promise = await api.listar(parseInt(idLocal!))
+            console.log(promise.data)
             setPainel(promise.data)
-            som(promise.data.chamada.ficha.identificacao)
+            som(promise.data.chamada.identificacao)
         } catch(e: any){
             console.log(e)
+            localStorage.clear()
         }
     }
 
