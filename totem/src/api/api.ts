@@ -14,9 +14,14 @@ async function alterarStatus(idFicha: number, data: AlterarStatus){
     return await axios.post(`${API_URL}/atendimento/alterar/${idFicha}`, data)
 }
 
+async function buscarPainel(idPainel: number){
+    return await axios.get(`${API_URL}/local/buscar/${idPainel}`)
+}
+
 const api = {
     listar,
-    alterarStatus
+    alterarStatus,
+    buscarPainel
 }
 
 export default api

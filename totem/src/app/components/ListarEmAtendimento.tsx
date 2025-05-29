@@ -32,9 +32,12 @@ type ExibirPainel = {
   
 }
 
-export default function ListarEmAtendimento() {
-  const params = useSearchParams()
-  const idLocal = params.get('idLocal')
+type Props = {
+  readonly idLocal: number
+}
+
+export default function ListarEmAtendimento({idLocal}: Props) {
+
   const [painel, setPainel] = useState<ExibirPainel>();
 
   function som(ficha: string){
@@ -48,7 +51,7 @@ export default function ListarEmAtendimento() {
 
     async function listarAtendimentos(){
       try{
-        const promise = await api.listar(parseInt(idLocal!))
+        const promise = await api.listar(idLocal)
             console.log(promise.data)
             setPainel(promise.data)
             som(promise.data.chamada.identificacao)
