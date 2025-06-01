@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ListarEmAtendimento from "./components/ListarEmAtendimento";
 import { useSearchParams } from "next/navigation";
 import api from "@/api/api";
@@ -40,12 +40,14 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="flex flex-col items-center h-screen">
+    <Suspense>
+      <main className="flex flex-col items-center h-screen">
       <section className="flex w-full">
         <TextoSuperior texto={localNome} />
         <TextoSuperior texto={currentTime} />
       </section>
       <ListarEmAtendimento idLocal={parseInt(idLocal!)} />
     </main>
+    </Suspense>
   );
 }
