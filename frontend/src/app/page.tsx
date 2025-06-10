@@ -1,5 +1,4 @@
 'use client'
-import { useState } from "react";
 import ListarAguardando from "./components/ListarAguardando";
 import ListarEmAtendimento from "./components/ListarEmAtendimento";
 import { useSearchParams } from "next/navigation";

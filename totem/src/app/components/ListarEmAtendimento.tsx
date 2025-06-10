@@ -40,51 +40,35 @@ export default function ListarEmAtendimento({idLocal}: Props) {
   const [painel, setPainel] = useState<ExibirPainel>()
   const [falando, setFalando] = useState(false)
 
-  /*function som(ficha: string){
-    const utterance = new SpeechSynthesisUtterance(`Ficha ${ficha}, guichê 02.`);
-    utterance.lang = 'pt-BR'; // Português do Brasil
-    utterance.rate = 0.8; // Velocidade da fala
-    utterance.pitch = 1.6; // Tom da voz
-
-    speechSynthesis.speak(utterance);
-  }
-
-  function som(ficha: string) {
-  const texto = `Ficha ${ficha}, guichê 02.`;
-
-  if (typeof window !== 'undefined' && (window as any).responsiveVoice) {
-    const rv = (window as any).responsiveVoice;
-
-    if (rv.voiceSupport()) {
-      rv.speak(texto, 'Brazilian Portuguese', {
-        rate: 0.8,
-        pitch: 1.6,
-        onstart: () => console.log('Fala iniciada'),
-        onend: () => console.log('Fala finalizada'),
-        onerror: () => console.error('Erro na fala')
-      });
-    } else {
-      console.warn('Navegador não suporta responsiveVoice.');
+ 
+    async function audio(texto: string) {
+      const audio = new Audio(`http://localhost:8080/tts?text=${texto}, guichê 00&lang=pt-BR&engine=g1&pitch=0.5&rate=0.4&volume=1&key=nDpQ6v9I&gender=female`)
+      setFalando(true)
+      audio.play();
+      setFalando(false)
     }
 
-  } else {
-    console.warn('responsiveVoice não está disponível no momento.');
-  }
-  }*/
+    async function tocarAudio(chamada: Atendimento){
+      const {identificacao, tipo} = chamada
+      const texto = `Ficha ${identificacao}, ${tipo}`
+      await audio(texto)
+    }
+  
 
     async function listarAtendimentos(){
       try{
         const promise = await api.listar(idLocal)
             console.log(promise.data)
-            setPainel(promise.data)
-            som(promise.data.chamada.identificacao, promise.data.chamada.tipo)
+            setPainel(promise.data)            
+            await tocarAudio(promise.data.chamada)
+            //som(promise.data.chamada.identificacao, promise.data.chamada.tipo)
         } catch(e: any){
             console.log(e)
             localStorage.clear()
         }
     }
 
-    function som(ficha: string, tipo:string){
+    /*function som(ficha: string, tipo:string){
       const textToSpeak = `Ficha ${ficha}, ${tipo}`
        console.log('Falando:', textToSpeak);
        
@@ -102,7 +86,7 @@ export default function ListarEmAtendimento({idLocal}: Props) {
           console.log('Fala concluída.')
          },
        });
-     }
+    }
 
     useEffect(() => {
     const scriptId = 'responsivevoice-script';
@@ -111,13 +95,12 @@ export default function ListarEmAtendimento({idLocal}: Props) {
       const script = document.createElement('script');
       script.id = scriptId;
       script.src =
-        'https://code.responsivevoice.org/responsivevoice.js?key=aaaaaaaa';
+        'https://code.responsivevoice.org/responsivevoice.js?key=nDpQ6v9I';
       script.async = true;
 
       script.onload = () => {
         if ((window as any).responsiveVoice) {
           (window as any).responsiveVoice.init();
-          //setIsVoiceReady(true);
         }
       };
 
@@ -130,34 +113,17 @@ export default function ListarEmAtendimento({idLocal}: Props) {
       if ((window as any).responsiveVoice) {
         (window as any).responsiveVoice.init();
         (window as any).responsiveVoice.setDefaultVoice('Brazilian Portuguese Female');
-        //setIsVoiceReady(true);
       }
     }
-  }, []);
-
-  // useEffect(() => {
-  //   if (voiceReady) {
-  //     const textToSpeak = 'Testando o som'
-  //     console.log('Falando:', textToSpeak);
-
-  //     (window as any).responsiveVoice.speak(textToSpeak, 'Brazilian Portuguese Female', {
-  //       pitch: 1,
-  //       rate: 0.8,
-  //       volume: 1,
-  //       onstart: () => console.log('Iniciando fala...'),
-  //       onend: () => console.log('Fala concluída.'),
-  //     });
-  //   }
-  // }, [voiceReady]);
+  }, [])*/
 
   useEffect(() => {
-    //listarAtendimentos()
+    listarAtendimentos()
     const socket = new SockJS(`${API_URL}/ws`);
     const stompClient: CompatClient = Stomp.over(socket);
 
     stompClient.connect({}, () => {
       stompClient.subscribe(`/topic/exibir-painel-${idLocal}`, (message) => {
-        console.log(message.body)
         listarAtendimentos()
       });
     });
@@ -174,7 +140,7 @@ export default function ListarEmAtendimento({idLocal}: Props) {
           <h1 className='flex text-[3rem] sm:text-[5rem] md:text-[7rem] lg:text-[12rem] xl:text-[16rem]'>
             {painel?.chamada?.identificacao}
           </h1>
-          <h1 className='flex text-4xl'>
+          <h1 className='flex text-4xl cursor-pointer'>
             {painel?.chamada?.tipo}
           </h1>
         </section>
